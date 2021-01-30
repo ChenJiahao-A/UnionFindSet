@@ -1,0 +1,50 @@
+// 并查集Java实现
+class UFSet {
+    int[] parent; //结点的父结点
+    int[] size;   //当前集合的结点数量
+    int n;        //结点的总个数
+    int setCount; // 当前集合数量
+
+    //并查集的初始化
+    public UFSet(int n) {
+        this.n = n;
+        this.setCount = n;
+        this.parent = new int[n];
+        this.size = new int[n];
+        Arrays.fill(size, 1);
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+    }
+    
+    //查找当前结点的根节点
+    //并且进行路径压缩
+    public int findset(int x) {
+        return parent[x] == x ? x : (parent[x] = findset(parent[x]));
+    }
+    
+    //合并两个集合
+    public boolean unite(int x, int y) {
+        x = findset(x);
+        y = findset(y);
+        if (x == y) {
+            return false;
+        }
+        if (size[x] < size[y]) {
+            int temp = x;
+            x = y;
+            y = temp;
+        }
+        parent[y] = x;
+        size[x] += size[y];
+        --setCount;
+        return true;
+    }
+    
+    //判断两个结点是否在同一集合
+    public boolean connected(int x, int y) {
+        x = findset(x);
+        y = findset(y);
+        return x == y;
+    }
+}
